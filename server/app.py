@@ -26,8 +26,6 @@ class RestaurantList(Resource):
         restaurants = Restaurant.query.all()
         return [restaurant.to_dict(only=("id", "name", "address")) for restaurant in restaurants], 200
 
-from sqlalchemy.orm import Session
-
 class RestaurantDetails(Resource):
     def get(self, id):
         with db.session() as session:
@@ -66,9 +64,7 @@ class RestaurantPizzaList(Resource):
         except ValueError as e:
             db.session.rollback()
             return {"errors": ["validation errors"]}, 400
-        except Exception as e:
-            db.session.rollback()
-            return {"errors": ["validation errors"]}, 400
+        
 
 api.add_resource(RestaurantList, '/restaurants')
 api.add_resource(RestaurantDetails, '/restaurants/<int:id>')
